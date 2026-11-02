@@ -65,6 +65,7 @@ interface ContextLike {
   readonly agentPresets?: PresetRegistryLike
   readonly reflect?: { get(name: string, strict?: boolean): unknown }
   effect?(setup: () => () => void, label?: string): unknown
+  inject?(deps: readonly string[], callback: (ctx: ContextLike) => void): unknown
 }
 
 /** Optional service lookup without an inject dependency. */
@@ -113,15 +114,25 @@ export async function apply(ctx: ContextLike, config: CompanionConfig = {}): Pro
     warn(`no persona cards found in ${library.bundledDir}`)
   }
 
-  const webServer = probeWebServer(ctx)
-  if (webServer !== undefined) {
-    ctx.effect?.(() => webServer.register({
+  const mountDashboard = (host: ContextLike): void => {
+    const webServer = probeWebServer(host)
+    if (webServer === undefined) {
+      warn('webServer unavailable; the card editor stays dark, presets still load')
+      return
+    }
+    host.effect?.(() => webServer.register({
       kind: 'prefix',
       path: CARDS_API_PREFIX,
       handler: (req, res) => handleCardsRequest(req, res, { library, presets, presetPrefix }),
     }), 'dsh-companion: cards api')
+  }
+  if (typeof ctx.inject === 'function') {
+    // The web server mounts after this plugin during boot, so probing it right
+    // here finds nothing. Declaring the dependency defers the mount until the
+    // service exists, and repeats it if the service is replaced on reload.
+    ctx.inject(['webServer'], mountDashboard)
   } else {
-    warn('webServer unavailable; the card editor stays dark, presets still load')
+    mountDashboard(ctx)
   }
 
   ctx.effect?.(() => () => {

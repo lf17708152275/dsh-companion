@@ -217,17 +217,17 @@ window.__ModuleLoader__.load({ id: 'dsh-companion', factory: (require) => {
     } catch (error) {
       try { console.warn('[dsh-companion] client half disabled:', error) } catch {}
     }
-    // Older hosts: a tab in the plugins settings page.
+    // The primary entry point: a tab in Settings → Built-in plugins, next to
+    // the read-only inventory. Registered unconditionally because that slot is
+    // a plain list and the Settings page enumerates it directly.
     try {
-      ctx.inject(['settingsScope'], (sctx) => {
-        try {
-          sctx.slots.inject('settings.plugins.tab', () => sctx.slots.register(
-            { name: 'settings.plugins.tab', id: BUNDLE_KEY, order: 60, label: '人格卡' },
-            (props) => (props && props.view === 'page' && props.tab !== false ? h(Editor) : null),
-          ))
-        } catch {}
-      })
-    } catch {}
+      ctx.slots.inject('settings.plugins.tab', () => ctx.slots.register(
+        { name: 'settings.plugins.tab', id: BUNDLE_KEY, order: 60, label: '人格卡' },
+        () => h(Editor),
+      ))
+    } catch (error) {
+      try { console.warn('[dsh-companion] settings tab disabled:', error) } catch {}
+    }
   }
   return module.exports
 } })

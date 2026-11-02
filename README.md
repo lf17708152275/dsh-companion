@@ -35,6 +35,15 @@ pnpm cards <源目录> <输出目录>
     orderBase: 100                # preset 排序起点（标准 preset 是 1/3）
 ```
 
+## 在 DSH 里编辑人格卡
+
+插件带一个 client 半边：installed 之后，DSH 的 **设置 → 插件 → dsh-companion** 页面里会出现卡片编辑器。
+
+- 左侧 23 张卡列表，右侧改 **名字 / 描述 / 人设正文**，保存后该卡的 preset **立即重新注册**（新会话生效；已开会话沿用旧修订）
+- 「恢复内置」删掉本地覆盖，回到包内版本
+- 覆盖写在 `~/.dsh/companion/cards/<id>.json`（`DSH_HOME` 可改），升级包不会丢编辑
+- 接口：`GET /x-dsh-companion/api/cards`、`POST .../cards/save`、`POST .../cards/reset`
+
 ## 验证
 
 ```bash

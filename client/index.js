@@ -190,6 +190,11 @@ window.__ModuleLoader__.load({ id: 'dsh-companion', factory: (require) => {
     )
   }
 
+  /** Settings-page wrapper: the section panel owns the chrome, so just pad. */
+  function SheetedEditor() {
+    return h('div', { style: { padding: '2px 4px 8px', maxWidth: 820 } }, h(Editor))
+  }
+
   module.exports.name = 'dsh-companion-client'
   module.exports.inject = ['slots']
   module.exports.apply = function apply(ctx) {
@@ -217,9 +222,20 @@ window.__ModuleLoader__.load({ id: 'dsh-companion', factory: (require) => {
     } catch (error) {
       try { console.warn('[dsh-companion] client half disabled:', error) } catch {}
     }
-    // The primary entry point: a tab in Settings → Built-in plugins, next to
-    // the read-only inventory. Registered unconditionally because that slot is
-    // a plain list and the Settings page enumerates it directly.
+    // Primary entry point: a first-class page in the Settings sidebar, the same
+    // `settings.section` slot the built-in "A2A connection" / third-party
+    // "bili settings" pages use. One click from the sidebar, no nesting.
+    try {
+      ctx.slots.inject('settings.section', () => ctx.slots.register(
+        { name: 'settings.section', id: BUNDLE_KEY, order: 20, label: '人格卡' },
+        SheetedEditor,
+      ))
+    } catch (error) {
+      try { console.warn('[dsh-companion] settings section disabled:', error) } catch {}
+    }
+    // Secondary entry point: a tab in Settings → Built-in plugins, next to the
+    // read-only inventory. Registered unconditionally because that slot is a
+    // plain list and the Settings page enumerates it directly.
     try {
       ctx.slots.inject('settings.plugins.tab', () => ctx.slots.register(
         { name: 'settings.plugins.tab', id: BUNDLE_KEY, order: 60, label: '人格卡' },

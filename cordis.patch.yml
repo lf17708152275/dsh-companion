@@ -1,0 +1,8 @@
+# Bundle layer for dsh-companion, applied when the package is listed in a
+# profile's dsh.profile.bundles (dsh plugin add does that).
+#
+# Registry of persona-card presets: the plugin reads `cards/*.json` (or the
+# `cardsDir` from this row's config) and registers one agent preset per card.
+- insert:
+    - id: companion
+      name: dsh-companion

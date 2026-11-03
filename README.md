@@ -37,9 +37,10 @@ pnpm cards -- <源目录> <输出目录>
 
 ## 在 DSH 里编辑人格卡
 
-插件带一个 client 半边：installed 之后，DSH 的 **设置 → 插件 → dsh-companion** 页面里会出现卡片编辑器。
+插件带一个 client 半边：installed 之后，DSH 的 **设置 → 人格卡** 页面里会出现卡片编辑器（设置页左侧一级入口，和「A2A 连接」同级）。
 
 - 左侧 23 张卡列表，右侧改 **名字 / 描述 / 人设正文**，保存后该卡的 preset **立即重新注册**（新会话生效；已开会话沿用旧修订）
+- 编辑器只出现在「设置 → 人格卡」；插件详情页（设置 → 内置插件 → dsh-companion）里也能改，两处是同一份数据
 - 「恢复内置」删掉本地覆盖，回到包内版本
 - 覆盖写在 `~/.dsh/companion/cards/<id>.json`（`DSH_HOME` 可改），升级包不会丢编辑
 - 接口：`GET /x-dsh-companion/api/cards`、`POST .../cards/save`、`POST .../cards/reset`

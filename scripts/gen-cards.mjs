@@ -13,8 +13,12 @@
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 
-const DEFAULT_SOURCE = '/home/long/桌面/project/26张人格卡'
-const source = process.argv[2] ?? DEFAULT_SOURCE
+const source = process.argv[2]
+if (source === undefined) {
+  console.error('用法: node scripts/gen-cards.mjs <人格卡目录> [输出目录]')
+  console.error('例: node scripts/gen-cards.mjs ~/cards')
+  process.exit(1)
+}
 const output = resolve(process.argv[3] ?? join(import.meta.dirname, '..', 'cards'))
 const META_HEADING = '## 十一、快速切换'
 const CARD_DIR_RE = /^(\d{2})-(.+)$/

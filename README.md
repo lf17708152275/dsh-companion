@@ -7,7 +7,7 @@ A2A 入站端点按 preset 选人格，于是"给谁用什么人格"退化成端
 ## 安装
 
 ```bash
-dsh plugin --profile web add /home/long/桌面/project/dsh-companion
+dsh plugin --profile web add /path/to/dsh-companion
 sudo systemctl restart dsh-web.service   # 插件在 host 层注册 preset，需重启
 ```
 
@@ -16,8 +16,8 @@ sudo systemctl restart dsh-web.service   # 插件在 host 层注册 preset，需
 ## 生成卡片
 
 ```bash
-pnpm cards            # 读 /home/long/桌面/project/26张人格卡 → cards/*.json
-pnpm cards <源目录> <输出目录>
+pnpm cards -- ~/cards               # 读 <目录>/NN-名字/人格卡.md → cards/*.json
+pnpm cards -- <源目录> <输出目录>
 ```
 
 - 每张卡取 `人格卡.md`：正文（〇～十节）作为 `persona`，`## 十一、快速切换` 起的人类元信息不进入 prompt
